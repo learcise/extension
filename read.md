@@ -1,1 +1,0 @@
-[ReactとTypeScriptでChrome Extensionを開発](https://qiita.com/KosukeTakagi/items/2ac4732f0b7014110157)
