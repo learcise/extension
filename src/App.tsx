@@ -12,7 +12,6 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
     const previousTwistRef = useRef<"left" | "right" | "center" | null>("center");
   const twistCooldownRef = useRef(false);
@@ -21,13 +20,13 @@ function App() {
   const streamRef = useRef<MediaStream | null>(null);
   const detectorRef = useRef<poseDetection.PoseDetector | null>(null);
   const isDetectionPausedRef = useRef(false);
-  const currentPositionRef = useRef({ x: 0, y: 0 });
+  // const currentPositionRef = useRef({ x: 0, y: 0 });
   const previousArmRef = useRef<"up" | "down" | null>(null);
   const armCooldownRef = useRef(false);
   const isArmRaisedRef = useRef(false);
   const previousGasshoRef = useRef<"gassho" | "open" | null>(null);
   const gasshoCooldownRef = useRef(false);
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   // const [isVideoMode, setIsVideoMode] = useState(false);
   const [kcal, setKcal] = useState(0);
 
@@ -129,7 +128,7 @@ function isArmVertical(wrist: poseDetection.Keypoint, shoulder: poseDetection.Ke
             const isRightVertical = rw && rs ? isArmVertical(rw, rs) : false;
             const isLeftVertical = lw && ls ? isArmVertical(lw, ls) : false;
             const bothUp = isRightVertical && isLeftVertical;
-            const pos = currentPositionRef.current;
+            // const pos = currentPositionRef.current;
 
             const currentArmState: "up" | "down" = bothUp ? "up" : "down";
             const prevArm = previousArmRef.current;
@@ -215,8 +214,8 @@ function isArmVertical(wrist: poseDetection.Keypoint, shoulder: poseDetection.Ke
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button onClick={() => setEnabled(e => !e)}>
+          {enabled ? 'Disable Pose Detection' : 'Enable Pose Detection'}
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
