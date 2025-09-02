@@ -1,3 +1,6 @@
+// import React from 'react'
+import { createRoot } from 'react-dom/client'
+import './style.css'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState, 
   // useMemo
@@ -7,12 +10,40 @@ import { useEffect, useRef, useState,
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
-import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
+/**
+ * ページに Shadow DOM でマウントポイントを作って React を差し込む
+ */
+function mount() {
+  // 既に挿入済みならスキップ
+  if (document.getElementById('my-ext-container')) return
 
+  // コンテナ作成
+  const host = document.createElement('div')
+  host.id = 'my-ext-container'
+  host.style.all = 'initial' // 念のため（Shadowと併用）
+  host.style.position = 'fixed'
+  host.style.bottom = '16px'
+  host.style.right = '16px'
+  host.style.zIndex = '2147483647' // 一番上
+
+  // Shadow DOM
+  const shadow = host.attachShadow({ mode: 'open' })
+  const appRoot = document.createElement('div')
+  shadow.appendChild(appRoot)
+
+  // ページへ追加
+  document.documentElement.appendChild(host)
+
+  // React マウント
+  const root = createRoot(appRoot)
+  root.render(<App />)
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+function App() {
     const previousTwistRef = useRef<"left" | "right" | "center" | null>("center");
   const twistCooldownRef = useRef(false);
   const animationFrameRef = useRef<number | null>(null);
@@ -208,9 +239,6 @@ function isArmVertical(wrist: poseDetection.Keypoint, shoulder: poseDetection.Ke
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
       </div>
       <h1>Vite + React</h1>
       <div className="card">
@@ -225,7 +253,12 @@ function isArmVertical(wrist: poseDetection.Keypoint, shoulder: poseDetection.Ke
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  )    
 }
 
-export default App
+// DOM 準備できたら実行
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mount)
+} else {
+  mount()
+}
