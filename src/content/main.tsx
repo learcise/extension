@@ -10,7 +10,7 @@ import { useEffect, useRef, useState,
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
-import viteLogo from '/vite.svg'
+import viteLogo from './vite.svg'
 import './App.css'
 
 /**
